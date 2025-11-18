@@ -9,7 +9,7 @@ import (
 	"goLang-taskmanager/src/routes"
 
 	"github.com/gin-gonic/gin"
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite" 
 )
 
 // Server connection worked now need to test databse connection with GET and test newly implented router

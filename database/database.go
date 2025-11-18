@@ -8,7 +8,7 @@ import (
 
 // basic connection function from database/sql package docs
 func DatabaseConnect() *sql.DB {
-	db, err := sql.Open("sqlite3", "./database/TaskDatabase.db")
+	db, err := sql.Open("sqlite", "./database/TaskDatabase.db")
 	if err != nil {
 		log.Fatal(err)
 	}
