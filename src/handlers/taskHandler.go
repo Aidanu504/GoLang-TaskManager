@@ -20,6 +20,7 @@ func NewTaskHandler(db *sql.DB) *TaskHandler {
 }
 
 // Get all tasks function
+// No input from client just returns JSON of all tasks in database
 func (h *TaskHandler) GetTasks(c *gin.Context) {
 
     // Fetch all tasks sorted by most recent
@@ -54,4 +55,40 @@ func (h *TaskHandler) GetTasks(c *gin.Context) {
     }
 
     c.JSON(http.StatusOK, tasks)
+}
+
+// Create new tasks function
+// Takes in JSON body with new task information
+// Insters this into database and returns created task with ID
+func (h *TaskHandler) CreateTask(c *gin.Context) {
+    var task models.Task
+
+    // Bind JSON body into task
+    if err := c.ShouldBindJSON(&task); err != nil {
+        utils.BadRequest(c, "invalid request body")
+        return
+    }
+
+    // SQL query for inserting task
+    // CreatedAt will be set by datbase and TaskID autoincremented
+    res, err := h.DB.Exec(`
+        INSERT INTO Tasks (TaskName, TaskDescription, IsCompleted)
+        VALUES (?, ?, ?)
+    `, task.TaskName, task.TaskDescription, task.IsCompleted)
+
+    // if this fails return 500 response 
+    if err != nil {
+        utils.ServerError(c, "failed to create task")
+        return
+    }
+
+    // Get the autoincremented taskID and put it back on the struct
+    id, err := res.LastInsertId()
+    if err != nil {
+        utils.ServerError(c, "failed to get last insert id")
+        return
+    }
+    task.TaskID = int(id)
+
+    c.JSON(http.StatusCreated, task)
 }

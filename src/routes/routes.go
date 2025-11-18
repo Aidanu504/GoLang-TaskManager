@@ -11,6 +11,7 @@ func Routes(h *handlers.TaskHandler) *gin.Engine {
     router := gin.Default()
 
     router.GET("/tasks", h.GetTasks)
+    router.POST("/tasks/", h.CreateTask)
 
     return router
 }

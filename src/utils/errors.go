@@ -14,3 +14,8 @@ func Error(c *gin.Context, status int, message string) {
 func ServerError(c *gin.Context, message string) {
     Error(c, http.StatusInternalServerError, message)
 }
+
+// helper function for bad request
+func BadRequest(c *gin.Context, message string) {
+    Error(c, http.StatusBadRequest, message)
+}
