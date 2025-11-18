@@ -3,22 +3,26 @@ package main
 
 import (
 	"log"
-	"github.com/aidanu504/golang-taskmanager/database"
+
+	"goLang-taskmanager/database"
 	"github.com/gin-gonic/gin"
 	_ "github.com/mattn/go-sqlite3"
+	"goLang-taskmanager/src/handlers"
+	"goLang-taskmanager/src/routes"
 )
 
-// Untested since need to push for "database" import above 
+// Server connection worked now need to test databse connection with GET and test newly implented router
 func main() {
 	db := database.DatabaseConnect()
 	defer db.Close()
 
-	router := gin.Default()
-	
-	router.GET("/", func(c *gin.Context) {
-        c.String(200, "Home Route Successful")
-    })
+	taskHandler := handlers.NewTaskHandler(db)
+	router := Routes(taskHandler)
 
-    log.Println("Server running")
-    router.Run(":8080")
+	router.GET("/", func(c *gin.Context) {
+		c.String(200, "Home Route Successful")
+	})
+
+	log.Println("Server running")
+	router.Run(":8080")
 }

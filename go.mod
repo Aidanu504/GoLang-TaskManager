@@ -1,4 +1,5 @@
-module gin-quickstart
+//module gin-quickstart
+module goLang-taskmanager
 
 go 1.25.4
 
