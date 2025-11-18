@@ -4,8 +4,8 @@ import (
     "database/sql"
     "net/http"
     "github.com/gin-gonic/gin"
-    "golang-taskmanager/src/models"
-	"golang-taskmanager/src/utils"
+    "goLang-taskmanager/src/models"
+	"goLang-taskmanager/src/utils"
 )
 
 // struct to hold database connection 
