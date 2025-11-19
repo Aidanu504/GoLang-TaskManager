@@ -124,3 +124,57 @@ func (h *TaskHandler) DeleteTask(c *gin.Context) {
     // Successful delete
     c.Status(http.StatusNoContent)
 }
+
+// Put to update a task within the database
+// It updates an existing task and returns the updated task JSON 
+func (h *TaskHandler) UpdateTask(c *gin.Context) {
+
+    // Grab task ID from url and convert to int
+    idStr := c.Param("id")
+    id, err := strconv.Atoi(idStr)
+    if err != nil {
+        utils.BadRequest(c, "TaskID not valid")
+        return
+    }
+
+    // Bind request body into the Task struct
+    var task models.Task
+    if err := c.ShouldBindJSON(&task); err != nil {
+        utils.BadRequest(c, "invalid request body")
+        return
+    }
+
+    // Run update query
+    // CreatedAt and TaskID aren't updated
+    res, err := h.DB.Exec(`
+        UPDATE Tasks
+        SET TaskName = ?, TaskDescription = ?, IsCompleted = ?
+        WHERE TaskID = ?
+    `, task.TaskName, task.TaskDescription, task.IsCompleted, id)
+    if err != nil {
+        utils.ServerError(c, "failed to update task")
+        return
+    }
+
+    // Ensure a row was updated
+    affected, err := res.RowsAffected()
+    if err != nil || affected == 0 {
+        utils.NotFound(c, "task not found")
+        return
+    }
+
+    // Load the updated task
+    var updated models.Task
+    err = h.DB.QueryRow(`
+        SELECT TaskID, TaskName, TaskDescription, IsCompleted, CreatedAt
+        FROM Tasks
+        WHERE TaskID = ?
+    `, id).Scan(&updated.TaskID, &updated.TaskName, &updated.TaskDescription, &updated.IsCompleted, &updated.CreatedAt)
+    if err != nil {
+        utils.ServerError(c, "failed to load updated task")
+        return
+    }
+
+    // Return updated task
+    c.JSON(http.StatusOK, updated)
+}

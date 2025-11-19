@@ -6,13 +6,18 @@ import (
 )
 
 // Routes func
-// Will add others need to commit to test get all tasks route
+// All CRUD endpoint routes added
 func Routes(h *handlers.TaskHandler) *gin.Engine {
     router := gin.Default()
+    
+    router.GET("/", func(c *gin.Context) {
+		c.String(200, "Home Route Successful")
+	})
 
     router.GET("/tasks", h.GetTasks)
     router.POST("/tasks", h.CreateTask)
     router.DELETE("/tasks/:id", h.DeleteTask)
+    router.PUT("/tasks/:id", h.UpdateTask)
 
     return router
 }
