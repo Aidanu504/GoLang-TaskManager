@@ -19,3 +19,8 @@ func ServerError(c *gin.Context, message string) {
 func BadRequest(c *gin.Context, message string) {
     Error(c, http.StatusBadRequest, message)
 }
+
+// helper function for if task not found
+func NotFound(c *gin.Context, message string) {
+    Error(c, http.StatusNotFound, message)
+}

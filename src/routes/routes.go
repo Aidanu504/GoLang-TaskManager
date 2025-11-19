@@ -12,6 +12,7 @@ func Routes(h *handlers.TaskHandler) *gin.Engine {
 
     router.GET("/tasks", h.GetTasks)
     router.POST("/tasks", h.CreateTask)
+    router.DELETE("/tasks/:id", h.DeleteTask)
 
     return router
 }
