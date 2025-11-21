@@ -56,7 +56,7 @@
                 <h2 class="section-title">Active Tasks</h2>
                 <div id="active-tasks" class="task-list"
                     hx-get="/tasks?completed=false"
-                    hx-trigger="load">
+                    hx-trigger="load,refresh-tasks from:body">
                 </div>
             </div>
 
@@ -64,10 +64,11 @@
                 <h2 class="section-title">Completed Tasks</h2>
                 <div id="completed-tasks" class="task-list"
                     hx-get="/tasks?completed=true"
-                    hx-trigger="load">
+                    hx-trigger="load,refresh-tasks from:body">
                 </div>
             </div>
         </div>
     </div>
+    <div id="modal-root"></div>
 </body>
 </html>

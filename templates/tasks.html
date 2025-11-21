@@ -28,10 +28,9 @@
                         class="edit-btn">Edit</button>
 
                 <!-- Delete button -->
-                <button hx-delete="/tasks/{{ .TaskID }}"
-                        hx-target="#task-{{ .TaskID }}"
-                        hx-swap="outerHTML swap:1s"
-                        hx-confirm="Are you sure you want to delete this task?"
+                <button hx-get="/tasks/{{ .TaskID }}/confirm-delete"
+                        hx-target="#modal-root"
+                        hx-swap="beforeend"
                         class="delete-btn">Delete</button>
             </div>
         </div>

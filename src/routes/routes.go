@@ -18,6 +18,10 @@ func Routes(h *handlers.TaskHandler) *gin.Engine {
 		c.HTML(200, "index.html", nil)
 	})
 
+	router.GET("/modal/close", func(c *gin.Context) {
+		c.String(200, "")
+	})
+
 	router.GET("/tasks", h.GetTasks)
 	router.POST("/tasks", h.CreateTask)
 	router.DELETE("/tasks/:id", h.DeleteTask)
@@ -26,6 +30,7 @@ func Routes(h *handlers.TaskHandler) *gin.Engine {
 	router.GET("/tasks/:id/edit", h.EditTask)
 	router.GET("/tasks/:id/view", h.ViewTask)
 	router.GET("/tasks/:id/details", h.ShowTaskDetails)
+	router.GET("/tasks/:id/confirm-delete", h.ConfirmDeleteTask)
 
 	return router
 }

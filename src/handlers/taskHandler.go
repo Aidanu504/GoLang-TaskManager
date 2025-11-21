@@ -148,7 +148,8 @@ func (h *TaskHandler) DeleteTask(c *gin.Context) {
 
 	// Successful delete
 	//c.Status(http.StatusNoContent)
-	c.Status(http.StatusOK)
+	c.Header("HX-Trigger", "refresh-tasks")
+	c.String(http.StatusOK, "")
 }
 
 // Put to update a task within the database
@@ -348,5 +349,20 @@ func (h *TaskHandler) ShowTaskDetails(c *gin.Context) {
     // Render the task details page with the loaded task data
 	c.HTML(http.StatusOK, "task-details.html", gin.H{
 		"task": task,
+	})
+}
+
+// ConfirmDeleteTask function
+// Renders a confirmation modal for deleting a task
+func (h *TaskHandler) ConfirmDeleteTask(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		utils.BadRequest(c, "taskID not valid")
+		return
+	}
+
+	c.HTML(http.StatusOK, "task-delete.html", gin.H{
+		"taskID": id,
 	})
 }
