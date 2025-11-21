@@ -1,13 +1,13 @@
 {{ if .tasks }}
     {{ range .tasks }}
-        <div id="task-{{ .TaskID }}" class="task-item">
+        <div id="task-{{ .TaskID }}" class="task-item {{ if .IsCompleted }}task-completed{{ end }}">
             <!-- Toggle checkbox -->
             <input type="checkbox"
                    {{ if .IsCompleted }}checked{{ end }}
                    hx-put="/tasks/{{ .TaskID }}/toggle"
                    hx-target="#task-{{ .TaskID }}"
-                   hx-swap="outerHTML">
-
+                   hx-swap="none">
+                   
             <!-- 
                 Task title
                 clicking this expands full description
@@ -37,5 +37,12 @@
         </div>
     {{ end }}
 {{ else }}
-    <div class="empty-state">No tasks yet please create one.</div>
+    <!-- Logic for state based on section -->
+    {{ if eq .section "active" }}
+        <div id="empty-active" class="empty-state">No active tasks here yet.</div>
+    {{ else if eq .section "completed" }}
+        <div id="empty-completed" class="empty-state">No completed tasks here yet.</div>
+    {{ else }}
+        <div class="empty-state">No tasks here yet.</div>
+    {{ end }}
 {{ end }}

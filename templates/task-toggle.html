@@ -1,0 +1,48 @@
+<!-- Remove the existing task -->
+<div id="task-{{ .task.TaskID }}" hx-swap-oob="delete"></div>
+
+<!-- Remove empty state from target section if it exists -->
+{{ if .task.IsCompleted }}
+<div id="empty-completed" hx-swap-oob="delete"></div>
+{{ else }}
+<div id="empty-active" hx-swap-oob="delete"></div>
+{{ end }}
+
+<!-- Insert the updated task into the correct section -->
+<div id="{{ .targetSection }}" hx-swap-oob="afterbegin">
+    <div id="task-{{ .task.TaskID }}" class="task-item {{ if .task.IsCompleted }}task-completed{{ end }}">
+
+        <!-- Toggle checkbox -->
+        <input type="checkbox"
+               {{ if .task.IsCompleted }}checked{{ end }}
+               hx-put="/tasks/{{ .task.TaskID }}/toggle"
+               hx-target="#task-{{ .task.TaskID }}"
+               hx-swap="none">
+
+        <!-- 
+            Task title
+            clicking this expands full description
+        -->
+        <div class="task-content"
+             hx-get="/tasks/{{ .task.TaskID }}/details"
+             hx-target="#task-{{ .task.TaskID }}"
+             hx-swap="outerHTML">
+            <h3>{{ .task.TaskName }}</h3>
+        </div>
+
+        <div class="task-actions">
+            <!-- Edit button -->
+            <button hx-get="/tasks/{{ .task.TaskID }}/edit"
+                    hx-target="#task-{{ .task.TaskID }}"
+                    hx-swap="outerHTML"
+                    class="edit-btn">Edit</button>
+
+            <!-- Delete button -->
+            <button hx-delete="/tasks/{{ .task.TaskID }}"
+                    hx-target="#task-{{ .task.TaskID }}"
+                    hx-swap="outerHTML swap:1s"
+                    hx-confirm="Are you sure you want to delete this task?"
+                    class="delete-btn">Delete</button>
+        </div>
+    </div>
+</div>

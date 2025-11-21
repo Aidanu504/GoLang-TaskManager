@@ -26,7 +26,7 @@
         <div class="task-form">
             <h2>Create New Task</h2>
             <form hx-post="/tasks" 
-                  hx-target="#task-list" 
+                  hx-target="#active-tasks" 
                   hx-swap="afterbegin"
                   hx-on::after-request="this.reset()">
 
@@ -51,9 +51,22 @@
         </div>
         
         <!-- Task List Container -->
-        <div id="task-list" class="task-list"
-             hx-get="/tasks" 
-             hx-trigger="load">
+        <div class="tasks-container">
+            <div class="tasks-section">
+                <h2 class="section-title">Active Tasks</h2>
+                <div id="active-tasks" class="task-list"
+                    hx-get="/tasks?completed=false"
+                    hx-trigger="load">
+                </div>
+            </div>
+
+            <div class="tasks-section">
+                <h2 class="section-title">Completed Tasks</h2>
+                <div id="completed-tasks" class="task-list"
+                    hx-get="/tasks?completed=true"
+                    hx-trigger="load">
+                </div>
+            </div>
         </div>
     </div>
 </body>

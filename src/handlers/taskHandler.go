@@ -24,13 +24,28 @@ func NewTaskHandler(db *sql.DB) *TaskHandler {
 // Get all tasks function
 // No input from client just returns JSON of all tasks in database
 func (h *TaskHandler) GetTasks(c *gin.Context) {
+	// Get the completed query parameter
+    completedParam := c.Query("completed")
 
 	// Fetch all tasks sorted by most recent
-	rows, err := h.DB.Query(`
-        SELECT TaskID, TaskName, TaskDescription, IsCompleted, CreatedAt
-        FROM Tasks
-        ORDER BY CreatedAt DESC
-    `)
+	// Now they are sorted by if completed or not
+	var query string
+	var section string
+    if completedParam == "true" {
+        query = `SELECT TaskID, TaskName, TaskDescription, IsCompleted, CreatedAt
+                 FROM Tasks WHERE IsCompleted = 1 ORDER BY CreatedAt DESC`
+		section = "completed"
+    } else if completedParam == "false" {
+        query = `SELECT TaskID, TaskName, TaskDescription, IsCompleted, CreatedAt
+                 FROM Tasks WHERE IsCompleted = 0 ORDER BY CreatedAt DESC`
+		section = "active"
+    } else {
+        query = `SELECT TaskID, TaskName, TaskDescription, IsCompleted, CreatedAt
+                 FROM Tasks ORDER BY CreatedAt DESC`
+		section = "all"
+    }
+
+	rows, err := h.DB.Query(query)
 
 	// If the query fails return 500 response
 	if err != nil {
@@ -60,6 +75,7 @@ func (h *TaskHandler) GetTasks(c *gin.Context) {
 	//Render using template
 	c.HTML(http.StatusOK, "tasks.html", gin.H{
 		"tasks": tasks,
+		"section": section,
 	})
 }
 
@@ -229,9 +245,16 @@ func (h *TaskHandler) ToggleTask(c *gin.Context) {
 		return
 	}
 
+	// Determine target section based on completion status
+    targetSection := "active-tasks"
+    if updated.IsCompleted {
+        targetSection = "completed-tasks"
+    }
+
 	// Render the updated task HTML fragment
-	c.HTML(http.StatusOK, "task-item.html", gin.H{
+	c.HTML(http.StatusOK, "task-toggle.html", gin.H{
 		"task": updated,
+		"targetSection": targetSection,
 	})
 }
 

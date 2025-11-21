@@ -1,10 +1,13 @@
-<div id="task-{{ .task.TaskID }}" class="task-item">
+<!-- Remove empty state if it exists when creating first task -->
+<div id="empty-active" hx-swap-oob="delete"></div>
+
+<div id="task-{{ .task.TaskID }}" class="task-item {{ if .task.IsCompleted }}task-completed{{ end }}">
     <!-- Toggle checkbox -->
     <input type="checkbox" 
            {{ if .task.IsCompleted }}checked{{ end }}
            hx-put="/tasks/{{ .task.TaskID }}/toggle" 
            hx-target="#task-{{ .task.TaskID }}" 
-           hx-swap="outerHTML">
+           hx-swap="none">
 
     <!-- Task title area -->
     <div class="task-content"

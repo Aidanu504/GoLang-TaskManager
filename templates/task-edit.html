@@ -7,7 +7,7 @@
            {{ if .task.IsCompleted }}checked{{ end }}
            hx-put="/tasks/{{ .task.TaskID }}/toggle" 
            hx-target="#task-{{ .task.TaskID }}" 
-           hx-swap="outerHTML"
+           hx-swap="none"
            disabled>
 
     <!-- Edit form -->
