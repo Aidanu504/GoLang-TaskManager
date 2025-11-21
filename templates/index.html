@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+
+    <!-- HTMX CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- App stylesheet -->
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Task <span class="accent">Manager</span></h1>
+        </header>
+        
+        <!-- Task Creation Form -->
+        <div class="task-form">
+            <h2>Create New Task</h2>
+            <form hx-post="/tasks" 
+                  hx-target="#task-list" 
+                  hx-swap="afterbegin"
+                  hx-on::after-request="this.reset()">
+
+                <div class="form-group">
+                    <label for="taskName">Task Name</label>
+                    <input type="text" 
+                           id="taskName" 
+                           name="TaskName" 
+                           required 
+                           placeholder="Enter task name...">
+                </div>
+
+                <div class="form-group">
+                    <label for="taskDescription">Description</label>
+                    <textarea id="taskDescription" 
+                              name="TaskDescription" 
+                              placeholder="Add task details..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">Add Task</button>
+            </form>
+        </div>
+        
+        <!-- Task List Container -->
+        <div id="task-list" class="task-list"
+             hx-get="/tasks" 
+             hx-trigger="load">
+        </div>
+    </div>
+</body>
+</html>

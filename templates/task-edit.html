@@ -1,0 +1,44 @@
+<div id="task-{{ .task.TaskID }}" class="task-item">
+    <!--
+        Checkbox 
+        shown but disabled while editing 
+    -->
+    <input type="checkbox" 
+           {{ if .task.IsCompleted }}checked{{ end }}
+           hx-put="/tasks/{{ .task.TaskID }}/toggle" 
+           hx-target="#task-{{ .task.TaskID }}" 
+           hx-swap="outerHTML"
+           disabled>
+
+    <!-- Edit form -->
+    <form class="edit-form"
+          hx-put="/tasks/{{ .task.TaskID }}"
+          hx-target="#task-{{ .task.TaskID }}"
+          hx-swap="outerHTML">
+        
+        <!-- Task name input -->
+        <input type="text" 
+               name="TaskName" 
+               value="{{ .task.TaskName }}" 
+               required
+               placeholder="Task name...">
+
+        <!-- Task description input -->
+        <textarea name="TaskDescription" placeholder="Task description...">{{ .task.TaskDescription }}</textarea>
+
+        <!-- Completed state on submit -->
+        <input type="hidden" name="IsCompleted" value="{{ .task.IsCompleted }}">
+
+        <div class="edit-actions">
+            <!-- Save button -->
+            <button type="submit" class="save-btn">Save</button>
+
+            <!-- Cancel button -->
+            <button type="button" 
+                    class="cancel-btn"
+                    hx-get="/tasks/{{ .task.TaskID }}/view"
+                    hx-target="#task-{{ .task.TaskID }}"
+                    hx-swap="outerHTML">Cancel</button>
+        </div>
+    </form>
+</div>
