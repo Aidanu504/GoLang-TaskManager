@@ -2,8 +2,8 @@ package handlers
 
 import (
 	"database/sql"
-	"goLang-taskmanager/src/models"
-	"goLang-taskmanager/src/utils"
+	"goLang-taskmanager/internals/models"
+	"goLang-taskmanager/internals/utils"
 	"net/http"
 	"strconv"
 

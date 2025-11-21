@@ -4,14 +4,19 @@ package main
 import (
 	"log"
 	"goLang-taskmanager/database"
-	"goLang-taskmanager/src/handlers"
-	"goLang-taskmanager/src/routes"
+	"goLang-taskmanager/internals/handlers"
+	"goLang-taskmanager/internals/routes"
 	_ "modernc.org/sqlite" 
 )
 
 // Server connection worked now need to test databse connection with GET and test newly implented router
 func main() {
 	db := database.DatabaseConnect()
+
+	// Migrate DB to create tables if not exist
+	if err := database.Migrate(db); err != nil {
+		log.Fatalf("Migration failed %v", err)
+	}
 	defer db.Close()
 
 	taskHandler := handlers.NewTaskHandler(db)
