@@ -1,0 +1,25 @@
+<!-- Overlay background -->
+<div class="modal-backdrop"
+     id="delete-modal-{{ .taskID }}">
+
+    <div class="modal">
+        <h3>Delete Task</h3>
+        <p>Are you sure you want to delete this task?</p>
+
+        <div class="modal-actions">
+            <!-- Cancel button -->
+            <button class="cancel-btn"
+                    type="button"
+                    hx-get="/modal/close"
+                    hx-target="#modal-root"
+                    hx-swap="innerHTML">Cancel</button>
+
+            <!-- Confirm delete -->
+            <button class="confirm-btn"
+                    type="button"
+                    hx-delete="/tasks/{{ .taskID }}"
+                    hx-target="#modal-root"
+                    hx-swap="innerHTML">Delete</button>
+        </div>
+    </div>
+</div>

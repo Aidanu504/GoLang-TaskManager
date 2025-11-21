@@ -1,0 +1,47 @@
+{{ if .tasks }}
+    {{ range .tasks }}
+        <div id="task-{{ .TaskID }}" class="task-item {{ if .IsCompleted }}task-completed{{ end }}">
+            <!-- Toggle checkbox -->
+            <input type="checkbox"
+                   {{ if .IsCompleted }}checked{{ end }}
+                   hx-put="/tasks/{{ .TaskID }}/toggle"
+                   hx-target="#task-{{ .TaskID }}"
+                   hx-swap="none">
+                   
+            <!-- 
+                Task title
+                clicking this expands full description
+            -->
+            <div class="task-content"
+                 hx-get="/tasks/{{ .TaskID }}/details"
+                 hx-target="#task-{{ .TaskID }}"
+                 hx-trigger="click"
+                 hx-swap="outerHTML">
+                <h3>{{ .TaskName }}</h3>
+            </div>
+
+            <div class="task-actions">
+                <!-- Edit button -->
+                <button hx-get="/tasks/{{ .TaskID }}/edit"
+                        hx-target="#task-{{ .TaskID }}"
+                        hx-swap="outerHTML"
+                        class="edit-btn">Edit</button>
+
+                <!-- Delete button -->
+                <button hx-get="/tasks/{{ .TaskID }}/confirm-delete"
+                        hx-target="#modal-root"
+                        hx-swap="beforeend"
+                        class="delete-btn">Delete</button>
+            </div>
+        </div>
+    {{ end }}
+{{ else }}
+    <!-- Logic for state based on section -->
+    {{ if eq .section "active" }}
+        <div id="empty-active" class="empty-state">No active tasks here yet.</div>
+    {{ else if eq .section "completed" }}
+        <div id="empty-completed" class="empty-state">No completed tasks here yet.</div>
+    {{ else }}
+        <div class="empty-state">No tasks here yet.</div>
+    {{ end }}
+{{ end }}

@@ -1,0 +1,31 @@
+<div id="task-{{ .task.TaskID }}" class="task-item task-expanded">
+    <!-- Checkbox for toggling completion status -->
+    <input type="checkbox" 
+           {{ if .task.IsCompleted }}checked{{ end }}
+           hx-put="/tasks/{{ .task.TaskID }}/toggle" 
+           hx-target="#task-{{ .task.TaskID }}" 
+           hx-swap="none">
+
+    <!-- Expanded task content -->
+    <div class="task-content"
+         hx-get="/tasks/{{ .task.TaskID }}/view"
+         hx-target="#task-{{ .task.TaskID }}"
+         hx-swap="outerHTML">
+        <h3>{{ .task.TaskName }}</h3>
+        <p class="task-description">{{ .task.TaskDescription }}</p>
+    </div>
+
+    <div class="task-actions">
+        <!-- Edit button -->
+        <button hx-get="/tasks/{{ .task.TaskID }}/edit"
+                hx-target="#task-{{ .task.TaskID }}"
+                hx-swap="outerHTML"
+                class="edit-btn">Edit</button>
+
+        <!-- Delete button -->
+        <button hx-get="/tasks/{{ .task.TaskID }}/confirm-delete"
+                 hx-target="#modal-root"
+                hx-swap="beforeend"
+                class="delete-btn">Delete</button>
+    </div>
+</div>
