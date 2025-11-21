@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"goLang-taskmanager/src/handlers"
+	"goLang-taskmanager/internals/handlers"
 
 	"github.com/gin-gonic/gin"
 )
